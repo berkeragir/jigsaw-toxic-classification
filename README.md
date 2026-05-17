@@ -35,7 +35,7 @@ ROC AUC is ≥0.97 on every label — the model **ranks** positives correctly. T
 - **`docs/`** — methods, experiments narrative, and the v6 postmortem.
 - **`artifacts/`** — model card, tuned thresholds, training history.
 
-The trained checkpoint (`best_model_v7.pt`, ~270 MB) is attached to the [v0.1.0 GitHub Release](#) — the link is set once the release is created.
+The trained checkpoint (`best_model_v7.pt`, ~655 MB — includes optimizer + scheduler state alongside the model weights) is attached to the [v0.1.0 GitHub Release](https://github.com/berkeragir/jigsaw-toxic-classification/releases/tag/v0.1.0).
 
 ## Methods at a glance
 
