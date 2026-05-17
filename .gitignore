@@ -1,0 +1,60 @@
+# --- Data (Kaggle competition files; user downloads via scripts/download_data.sh) ---
+train.csv
+test.csv
+test_labels.csv
+sample_submission.csv
+
+# --- Cached / preprocessed artifacts (regenerable; ~600MB each) ---
+preprocessed_data/
+*.pkl
+*.npz
+
+# --- Model checkpoints (distributed via GitHub Release, not git) ---
+*.pt
+
+# --- Generated plots (regenerable from notebooks) ---
+*.png
+
+# --- Internal-only notes and archived old notebooks ---
+archive/
+RESULTS_v7.md
+
+# --- Bulky inference outputs (regenerable; canonical metric files live in artifacts/) ---
+test_predictions_v7.csv
+test_predictions_v7_tuned.csv
+test_predictions_v8_1.csv
+test_predictions_v8_combined.csv
+
+# --- Defensive: prevent notebook re-runs from re-committing metric files at root.
+#     Canonical copies live in artifacts/.
+/final_metrics_v7.json
+/hierarchical_severe_v8.json
+/hierarchical_severe_v8_1.json
+/tuned_thresholds_v7.json
+/training_history_v7.csv
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Virtual envs ---
+.venv/
+venv/
+env/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Claude Code local state ---
+.claude/

@@ -1,0 +1,11 @@
+# Pinned to the versions used to produce best_model_v7.pt (PyTorch with CUDA 11.8).
+# If your CUDA differs, install torch from https://pytorch.org/get-started/locally/
+# matching your driver, then `pip install -r requirements.txt` for the rest.
+torch==2.6.0
+transformers==4.45.2
+scikit-learn==1.7.2
+pandas==2.2.3
+numpy==2.2.3
+matplotlib==3.10.1
+seaborn==0.13.2
+tqdm==4.67.1

@@ -1,0 +1,54 @@
+{
+  "notebook_version": "v8.1-hierarchical-severe-unfrozen",
+  "method": "Unfroze last 2 DistilBERT layers + trunk + new binary head; trained on toxic-positive rows only, BCE on severe_toxic.",
+  "config_v81": {
+    "UNFREEZE_LAST_N": 2,
+    "EPOCHS": 3,
+    "LR_BACKBONE": 2e-05,
+    "LR_HEAD": 0.001,
+    "WEIGHT_DECAY": 0.0001,
+    "CHECKPOINT": "conditional_head_v8_1.pt"
+  },
+  "train_subset_size": 13765,
+  "train_subset_severe_rate": 0.10504903644323349,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.19816093153296235,
+      "within_toxic_val_pr_auc": 0.5331066805474355,
+      "within_toxic_val_roc_auc": 0.9282000778134423
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.18409981836720116,
+      "within_toxic_val_pr_auc": 0.5481824695429106,
+      "within_toxic_val_roc_auc": 0.9256419608987452
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.17628577016199282,
+      "within_toxic_val_pr_auc": 0.518903175600417,
+      "within_toxic_val_roc_auc": 0.9222522128197647
+    }
+  ],
+  "test_comparison": {
+    "v7 baseline": {
+      "pr_auc": 0.34425498645374797,
+      "roc_auc": 0.9899165084509529
+    },
+    "v8 frozen conditional (Linear on trunk)": {
+      "pr_auc": 0.36244125219661827,
+      "roc_auc": 0.9904853611038518
+    },
+    "v8.1 unfrozen (2 layers fine-tuned)": {
+      "pr_auc": 0.35339193946148684,
+      "roc_auc": 0.9891264329421886
+    },
+    "v8.1 combined: P(sev|tox)_v81 * P(tox)_v7": {
+      "pr_auc": 0.35281568831824833,
+      "roc_auc": 0.9896433049705171
+    }
+  },
+  "test_delta_pr_vs_v7_baseline": 0.008560701864500364,
+  "test_delta_pr_vs_v8_frozen": -0.009625563878369936
+}

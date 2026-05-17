@@ -1,0 +1,23 @@
+{
+  "notebook_version": "v7-shared-trunk",
+  "test_micro_pr_auc": 0.7575443095369807,
+  "test_exact_match": 0.8336928319109694,
+  "val_best_pr_auc": 0.8765375386325284,
+  "total_training_time_hours": 0.863037941786978,
+  "config": {
+    "USE_SUBSET": false,
+    "SUBSET_SIZE": 50000,
+    "BATCH_SIZE": 64,
+    "NUM_EPOCHS": 4,
+    "LEARNING_RATE": 3e-05,
+    "MAX_LENGTH": 192,
+    "USE_EMBEDDINGS_ONLY": false,
+    "FREEZE_LAYERS": 2,
+    "HEAD_HIDDEN_SIZE": 384,
+    "USE_FP16": true,
+    "GRADIENT_ACCUMULATION_STEPS": 1,
+    "BUCKET_MULTIPLIER": 50,
+    "SEED": 42,
+    "VAL_SPLIT": 0.1
+  }
+}
