@@ -28,12 +28,30 @@ This repo is a portfolio artifact built end-to-end from EDA through training, ev
 
 ROC AUC is ≥0.97 on every label — the model **ranks** positives correctly. The PR AUC drop on `severe_toxic` is the precision-recall area being geometrically starved by 0.57% prevalence on test, not a ranking failure. More on this in [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md).
 
+## Is 0.758 PR AUC actually good? Compare to a baseline.
+
+A 1-minute TF-IDF + Logistic Regression baseline (`scripts/baseline_tfidf_logreg.py`) gets **0.722** test micro PR AUC on the same split and the same `-1`-row test filtering. DistilBERT wins by **+0.036 micro PR AUC** for ~50× the training cost.
+
+What's interesting is *where* the transformer wins:
+
+| Label | TF-IDF + LogReg | DistilBERT v7 | Δ |
+|---|---:|---:|---:|
+| toxic | 0.760 | 0.806 | +0.046 |
+| obscene | 0.780 | 0.805 | +0.025 |
+| insult | 0.707 | 0.792 | **+0.085** |
+| identity_hate | 0.490 | 0.678 | **+0.188** |
+| threat | 0.465 | 0.603 | **+0.138** |
+| severe_toxic | 0.304 | 0.344 | +0.040 |
+
+The transformer adds almost nothing on the surface-profanity labels (`toxic`, `obscene`) where bag-of-ngrams is already nearly sufficient, and pulls clearly ahead on the context-dependent labels (`identity_hate`, `threat`, `insult`) — exactly the theoretical advantage of contextualized embeddings. Full discussion in [`docs/EXPERIMENTS.md`](docs/EXPERIMENTS.md#baseline--tf-idf--logistic-regression); raw numbers in [`artifacts/baseline_tfidf_logreg.json`](artifacts/baseline_tfidf_logreg.json).
+
 ## What's in this repo
 
 - **`src/`** — importable modules: `model.py` (shared-trunk DistilBERT), `data.py` (variable-length tokenization + length-bucketed sampler), `losses.py` (focal loss), `evaluate.py` (per-label metrics + threshold tuning with rare-label floor).
 - **`notebooks/`** — the canonical training pipeline (`01_training_v7.ipynb`) and the follow-up hierarchical experiment (`02_hierarchical_v8.ipynb`).
+- **`scripts/`** — `baseline_tfidf_logreg.py` (the 1-minute classical baseline) and `download_data.sh`.
 - **`docs/`** — methods, experiments narrative, and the v6 postmortem.
-- **`artifacts/`** — model card, tuned thresholds, training history.
+- **`artifacts/`** — model card, tuned thresholds, training history, baseline metrics.
 
 The trained checkpoint (`best_model_v7.pt`, ~655 MB — includes optimizer + scheduler state alongside the model weights) is attached to the [v0.1.0 GitHub Release](https://github.com/berkeragir/jigsaw-toxic-classification/releases/tag/v0.1.0).
 

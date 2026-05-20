@@ -1,0 +1,148 @@
+{
+  "method": "TF-IDF (word, 1-2 grams, sublinear_tf, min_df=3, max_features=200k) + per-label Logistic Regression (one-vs-rest, C=4.0, liblinear)",
+  "purpose": "Non-transformer baseline. Validates whether the DistilBERT model in notebooks/01_training_v7.ipynb justifies its training cost.",
+  "config": {
+    "tfidf": {
+      "ngram_range": [
+        1,
+        2
+      ],
+      "min_df": 3,
+      "max_df": 0.95,
+      "sublinear_tf": true,
+      "max_features": 200000,
+      "strip_accents": "unicode"
+    },
+    "logreg": {
+      "C": 4.0,
+      "solver": "liblinear",
+      "max_iter": 200,
+      "random_state": 42
+    },
+    "split": {
+      "VAL_SPLIT": 0.1,
+      "SEED": 42
+    }
+  },
+  "n_features_tfidf": 200000,
+  "n_train_split": 143613,
+  "n_val_split": 15958,
+  "n_test_valid": 63978,
+  "val_micro_pr_auc": 0.8292866278582419,
+  "val_pr_aucs": {
+    "toxic": 0.8811698567827922,
+    "severe_toxic": 0.42081857502176095,
+    "obscene": 0.8823966608425737,
+    "threat": 0.495446207891255,
+    "insult": 0.7938925441427621,
+    "identity_hate": 0.5087649971668815
+  },
+  "test_micro_pr_auc": 0.7218985616495135,
+  "test_pr_aucs": {
+    "toxic": 0.7598857881226506,
+    "severe_toxic": 0.30352689655641923,
+    "obscene": 0.7795076441553822,
+    "threat": 0.4649176931078133,
+    "insult": 0.7071570918394523,
+    "identity_hate": 0.49019331971993624
+  },
+  "test_roc_aucs": {
+    "toxic": 0.9598066613656767,
+    "severe_toxic": 0.9819926008889951,
+    "obscene": 0.9728219640364975,
+    "threat": 0.9923883879083784,
+    "insult": 0.9677687290517091,
+    "identity_hate": 0.9764016594638582
+  },
+  "test_exact_match": 0.8953702835349652,
+  "macro_f1_test_at_0.5": 0.5179591371242593,
+  "macro_f1_test_tuned": 0.5350226220876101,
+  "macro_f1_lift": 0.01706348496335075,
+  "per_label_test_metrics": {
+    "toxic": {
+      "threshold": 0.31490767002105713,
+      "test_precision_tuned": 0.5691009260344625,
+      "test_recall_tuned": 0.7972085385878489,
+      "test_f1_tuned": 0.6641132617468025,
+      "test_precision_at_0.5": 0.6464371980676329,
+      "test_recall_at_0.5": 0.7031198686371101,
+      "test_f1_at_0.5": 0.6735881705206859
+    },
+    "severe_toxic": {
+      "threshold": 0.1720769703388214,
+      "test_precision_tuned": 0.26634382566585957,
+      "test_recall_tuned": 0.5994550408719346,
+      "test_f1_tuned": 0.3688181056160939,
+      "test_precision_at_0.5": 0.3727810650887574,
+      "test_recall_at_0.5": 0.34332425068119893,
+      "test_f1_at_0.5": 0.3574468085106383
+    },
+    "obscene": {
+      "threshold": 0.13895373046398163,
+      "test_precision_tuned": 0.555454047140508,
+      "test_recall_tuned": 0.8236250338661609,
+      "test_f1_tuned": 0.6634657354866871,
+      "test_precision_at_0.5": 0.7839421088904204,
+      "test_recall_at_0.5": 0.6163641289623408,
+      "test_f1_at_0.5": 0.6901258910966176
+    },
+    "threat": {
+      "threshold": 0.5,
+      "test_precision_tuned": 0.5918367346938775,
+      "test_recall_tuned": 0.27488151658767773,
+      "test_f1_tuned": 0.37540453074433655,
+      "test_precision_at_0.5": 0.5918367346938775,
+      "test_recall_at_0.5": 0.27488151658767773,
+      "test_f1_at_0.5": 0.37540453074433655
+    },
+    "insult": {
+      "threshold": 0.1883213073015213,
+      "test_precision_tuned": 0.5636607742224211,
+      "test_recall_tuned": 0.7350452290633207,
+      "test_f1_tuned": 0.6380445795339412,
+      "test_precision_at_0.5": 0.7534246575342466,
+      "test_recall_at_0.5": 0.5135687189962066,
+      "test_f1_at_0.5": 0.6107929897622766
+    },
+    "identity_hate": {
+      "threshold": 0.10484790056943893,
+      "test_precision_tuned": 0.42561576354679803,
+      "test_recall_tuned": 0.6067415730337079,
+      "test_f1_tuned": 0.5002895193977996,
+      "test_precision_at_0.5": 0.6801346801346801,
+      "test_recall_at_0.5": 0.28370786516853935,
+      "test_f1_at_0.5": 0.400396432111001
+    }
+  },
+  "thresholds": {
+    "toxic": 0.31490767002105713,
+    "severe_toxic": 0.1720769703388214,
+    "obscene": 0.13895373046398163,
+    "threat": 0.5,
+    "insult": 0.1883213073015213,
+    "identity_hate": 0.10484790056943893
+  },
+  "val_positive_counts": {
+    "toxic": 1480,
+    "severe_toxic": 148,
+    "obscene": 836,
+    "threat": 37,
+    "insult": 791,
+    "identity_hate": 147
+  },
+  "floored_labels": [
+    "threat"
+  ],
+  "timing_seconds": {
+    "tfidf_fit_transform": 37.11984372138977,
+    "logreg_train_predict": 21.69665026664734,
+    "total": 58.81649398803711
+  },
+  "vs_v7": {
+    "test_micro_pr_auc_v7": 0.7575443095369807,
+    "test_micro_pr_auc_delta": -0.035645747887467216,
+    "v7_train_time_minutes": 51.78227650721868,
+    "baseline_train_time_minutes": 0.9802748998006184,
+    "speedup_x": 52.824239932850325
+  }
+}

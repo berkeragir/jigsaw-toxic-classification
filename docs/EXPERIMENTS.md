@@ -2,6 +2,47 @@
 
 A roughly chronological account of what was tried, what worked, and what didn't. The complete picture matters more than the headline number — negative results stay in.
 
+## Baseline — TF-IDF + Logistic Regression
+
+Before reaching for a transformer, it's worth knowing what a strong classical baseline gets. The baseline is `scripts/baseline_tfidf_logreg.py`: word 1–2 grams with sublinear TF, `min_df=3`, `max_features=200,000`, plus a per-label logistic regression (one-vs-rest, `C=4.0`, liblinear). Same train/val split as v7 (`SEED=42`, `VAL_SPLIT=0.1`), same `-1`-row filtering on the test set, same metrics, same threshold-tuning rule.
+
+| Metric | Baseline | v7 (DistilBERT) | Δ |
+|---|---:|---:|---:|
+| Test micro PR AUC | 0.722 | **0.758** | +0.036 |
+| Macro F1 @ 0.5 | 0.518 | **0.569** | +0.051 |
+| Macro F1 tuned | 0.535 | **0.612** | +0.077 |
+| Val micro PR AUC (best) | 0.829 | **0.877** | +0.048 |
+| Train + predict time | **0.98 min** (CPU) | 51.8 min (GTX 1070) | **53× slower** |
+
+### Per-label test PR AUC
+
+| Label | Baseline | v7 | Δ |
+|---|---:|---:|---:|
+| toxic | 0.760 | 0.806 | +0.046 |
+| obscene | 0.780 | 0.805 | +0.025 |
+| insult | 0.707 | 0.792 | **+0.085** |
+| identity_hate | 0.490 | 0.678 | **+0.188** |
+| threat | 0.465 | 0.603 | **+0.138** |
+| severe_toxic | 0.304 | 0.344 | +0.040 |
+
+### Reading the gap
+
+The transformer wins on every label, but the gains are not uniform — they are **concentrated exactly where contextual representation should help**:
+
+- **Surface-profanity labels** (`toxic`, `obscene`): the baseline lands within 0.025–0.046 PR AUC of the transformer. These labels are largely detectable from lexical content, which is what bag-of-ngrams encodes well. The transformer doesn't have much room to differentiate itself here.
+- **Contextual labels** (`identity_hate` +0.188, `threat` +0.138, `insult` +0.085): the transformer pulls clearly ahead. A threat or a slur depends on how words combine and who they target, not which words are present. This is the textbook advantage of contextualized embeddings over bag-of-words.
+- **`severe_toxic`**: both models struggle similarly (+0.040). Consistent with the structural argument in the v7 section — this label's PR AUC ceiling is set by 1% prevalence and ordinal-cut subjectivity, not by representational power.
+
+### Why publish the baseline at all
+
+Three reasons:
+
+1. **It frames the transformer investment honestly.** Reporting v7 in isolation invites the reader to assume the alternative is 0; reporting against a 0.722 baseline shows what 50 GPU-minutes actually bought (+0.036 micro PR AUC, with most of that landing on the labels where it should).
+2. **It identifies which labels deserve more model capacity.** If a backbone swap is going to help anywhere, it's on the labels where the current model already pulls clearly away from bag-of-ngrams — they're the ones whose ceiling is set by representational power, not by data thinness or label structure.
+3. **It's a sanity check.** A transformer that does not measurably beat TF-IDF + LogReg on a text-classification task probably has a bug. Future iterations (v9, backbone swaps) re-run this comparison as a guardrail.
+
+The full per-label JSON is in [`../artifacts/baseline_tfidf_logreg.json`](../artifacts/baseline_tfidf_logreg.json).
+
 ## v7 — shared trunk + length bucketing (the canonical pipeline)
 
 Configuration in `notebooks/01_training_v7.ipynb`. Architecture and rationale in [`METHODS.md`](METHODS.md). Headline:
